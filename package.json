@@ -2,7 +2,7 @@
   "name": "nft-market",
   "version": "0.1.0",
   "private": true,
-  "homepage":"https://addify-market.github.io/adf-supplier-web-app/",
+  "homepage": "https://addify-market.github.io/adf-supplier-web-app/",
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
