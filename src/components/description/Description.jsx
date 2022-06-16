@@ -17,7 +17,7 @@ const Description = ({title}) => {
  const changeUserStatus = (e) => {
    e.preventDefault()
    console.log("hits");
-   toggleUser(true, null);
+   toggleUser(true, 'addonOwner', false);
    navigate('/supplier/dashboard');
  }
 

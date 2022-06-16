@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./navbar.css";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { ethers } from "ethers";
+import axios from "axios";
+import {data} from "../../config";
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+toast.configure();
 const Menu = () => (
   <>
     <Link to="/">
@@ -15,6 +22,7 @@ const Menu = () => (
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [is_connected, setConnected] = useState(false);
   // const [user, setUser] = useState(false);
 
   // const handleLogout = () => {
@@ -24,11 +32,65 @@ const Navbar = () => {
   //   setUser(true);
   // };
 
-  const { user } = useSelector(state => state);
- 
 
+useEffect(() => {
+  // Update the document title using the browser API
+  if(localStorage.getItem('addonOwner')!== null){
+    setConnected(true);
+  }else{
+    
+    setConnected(false);
+  }
+  console.log("isconnected",is_connected)
+},[is_connected]);
+
+  const { user } = useSelector(state => state);
+  const { role } = useSelector(role => role);
+  const { connected } = useSelector(connected => connected);
+  let navigate = useNavigate();
+  const connectAddonOwner = async () => {
+    if (!window.ethereum)
+      alert("No crypto wallet found. Please install it.");
+    // const web3 = new Web3(window.ethereum);
+    await window.ethereum.send("eth_requestAccounts");
+    
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const walletId = await signer.getAddress();
+    console.log({signer});
+    console.log(walletId);
+    if(walletId){
+      //console.log(data, "variables");
+      localStorage.setItem("addonOwner",walletId);
+      const response = await axios
+        .get(`${data.serviceUrl}/supplier/${walletId}`)
+        .then(res => res.data)
+        .catch(e => {
+          console.log("\x1b[31mNot Found");
+          return null;
+        });
+      console.log("response",response);
+      if(response){
+        toast.success("Succesfully Login");
+        console.log('toast',toast);
+        setConnected(true);
+        navigate('supplier/dashboard');
+      }else{
+        navigate('supplier/register');
+      }
+      console.log(response);
+    }
+  }
+  const disconnectAddonOwner =  async () => {
+    localStorage.removeItem('addonOwner');
+    window.ethereum.on('disconnect');
+    setConnected(false);
+    navigate('supplier/dashboard');
+  }
   return (
     <div className="navbar">
+
+      {console.log("user",user,"connected",connected)}
       <div className="navbar-links">
         <div className="navbar-links_logo">
           <img src={logo} alt="logo" />
@@ -38,11 +100,23 @@ const Navbar = () => {
         </div>
       </div>
       <div className="navbar-sign">
-        {user && (
+        {user && role==='addonOwner' && !is_connected && (
           <>
             
-            <button type="button" className="secondary-btn" >
+            <button type="button" className="secondary-btn" onClick={connectAddonOwner}>
               Connect
+            </button>
+          </>
+        )}
+        {user && role==='addonOwner' && is_connected && (
+          <>
+           <Link to="/create">
+              <button type="button" className="primary-btn" >
+                Create
+              </button>
+            </Link>
+            <button type="button" className="secondary-btn" onClick={disconnectAddonOwner}>
+              Discconnected
             </button>
           </>
         )}
@@ -61,7 +135,7 @@ const Navbar = () => {
             <div className="navbar-menu_container-links-sign">
               {user && (
                 <>
-                  <button type="button" className="secondary-btn">
+                  <button type="button" className="secondary-btn" >
                     Connect
                   </button>
                 </>
