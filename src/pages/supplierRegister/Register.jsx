@@ -1,18 +1,16 @@
 import React, { useEffect , useState} from 'react';
 import './register.css'
-import {Link} from 'react-router-dom'
-import Image from '../../assets/Image.png'
 import loader from "../../assets/loading2.gif";
 import axios from "axios";
 import {data} from "../../config";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useHook from "../../hooks";
 import { useNavigate } from 'react-router-dom';
-toast.configure();
+
 const Register = () => {
  const [loading,setLoading] = useState(true);
  const [walletId,setWalletId] = useState(null);
+ const [message,setMessage] =useState( "Please Set Your Profile...");
  const [values, setValues] = useState({
   name: "",
   email: "",
@@ -21,7 +19,7 @@ const Register = () => {
   buttonText: "Submit",
   });
 const { name, phone, email, business } = values;
- const message = "Please Set Your Profile..."
+ 
  useEffect(() => {
   setTimeout(() => {
     setLoading(false);
@@ -34,58 +32,32 @@ const handleChange = (name) => (e) => {
   setValues({ ...values, [name]: e.target.value });
 };
 let navigate = useNavigate();
-const {toggleUser} = useHook();
-const changeUserStatus = (e) => {
-  e.preventDefault()
-  console.log("hits");
-  toggleUser(true, 'addonOwner',true);
-  navigate('/supplier/dashboard');
-}
+
   
+const sendRequest = async (e) => {
+  e.preventDefault();
   
-  
-  
-  
-  
-  
-  
-  
-  const sendRequest = async (e) => {
-    e.preventDefault();
-    // setValues({ ...values, buttonText: "requesting.." });
-    // try {
-    // let result = await axios({
-    // method: "POST",
-    // url: `${process.env.REACT_APP_API_URL}/signup`,
-    // data: { name, email, password, repassword },
-    // });
-    // if (result) {
-    // //console.log(result)
-    // toast.success(result.data.message);
-    // setValues({ ...values, buttonText: "Submit" });
-    // }
-    // } catch (e) {
-    // //console.log(e.response.data.error);
-    // toast.error(e.response.data.error);
-    // setError(e.response.data.error);
-    // setValues({ ...values, buttonText: "Submit" });
-    // }
-    try {
-      
-    let result = await axios({
-      method: "POST",
-        url: `${data.serviceUrl}/supplier`,
-        data: {walletId,name,phone,email,business},
-      });
-      if (result) {
-        //console.log(result)
-        toast.success(result.data.message);
-        changeUserStatus();
-      }
-    } catch (error) {
-      toast.error(error);
-    }
-  };
+  try {
+  console.log("name1",name);
+  if(name===""){
+    alert("Please Fill Up Your Name");
+    return ;
+  }
+  setLoading(true);
+  console.log("ok");
+  setMessage("Please Wait")   
+   await axios({
+    method: "POST",
+      url: `${data.serviceUrl}/supplier`,
+      data: {walletId,name,phone,email,business},
+    });
+      setLoading(false);
+      setMessage("Success!");
+      navigate('/supplier/dashboard');
+  } catch (error) {
+    toast.error(error);
+  }
+};
     
   return (
 
@@ -106,11 +78,7 @@ const changeUserStatus = (e) => {
         <>
       <div className="register-container">
       <h1>fill up the form</h1>
-      <p className='upload-file'>Upload Profile pic</p>
-      <div className="upload-img-show">
-        <img src={Image} alt="banner" />
-        <p>browse media on your device</p>
-      </div>
+      
       <form onSubmit={sendRequest} className='register-writeForm form-data' autoComplete='off' >
       
         <div className="register-formGroup">
@@ -130,10 +98,7 @@ const changeUserStatus = (e) => {
           <input type="text" onChange={handleChange("business")} value={business} placeholder='Business' />
         </div>
        <div className="register-button">
-        <button className='register-writeButton'>register</button>
-        <Link to="/login">
-          <button className='reg-login-writeButton' >Login</button>
-        </Link>
+        <button className='register-writeButton'>submit</button>
        </div>
       </form>
     </div>

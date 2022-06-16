@@ -10,7 +10,6 @@ import {data} from "../../config";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-toast.configure();
 const Menu = () => (
   <>
     <Link to="/">
@@ -38,7 +37,6 @@ useEffect(() => {
   if(localStorage.getItem('addonOwner')!== null){
     setConnected(true);
   }else{
-    
     setConnected(false);
   }
   console.log("isconnected",is_connected)
@@ -46,7 +44,6 @@ useEffect(() => {
 
   const { user } = useSelector(state => state);
   const { role } = useSelector(role => role);
-  const { connected } = useSelector(connected => connected);
   let navigate = useNavigate();
   const connectAddonOwner = async () => {
     if (!window.ethereum)
@@ -83,14 +80,11 @@ useEffect(() => {
   }
   const disconnectAddonOwner =  async () => {
     localStorage.removeItem('addonOwner');
-    window.ethereum.on('disconnect');
     setConnected(false);
     navigate('supplier/dashboard');
   }
   return (
     <div className="navbar">
-
-      {console.log("user",user,"connected",connected)}
       <div className="navbar-links">
         <div className="navbar-links_logo">
           <img src={logo} alt="logo" />
