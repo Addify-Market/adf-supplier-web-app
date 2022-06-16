@@ -9,6 +9,7 @@ const init = {
   keyword: "",
   role: "",
   user: false,
+  connected : true,
   addOns: []
 };
 
@@ -28,6 +29,11 @@ const reducer = (state = init, action) => {
       return {
         ...state,
         user: action.payload
+      };
+      case "SET_CONNECTED":
+      return {
+        ...state,
+        connected: action.payload
       };
     case "SET_ROLE":
       return {
