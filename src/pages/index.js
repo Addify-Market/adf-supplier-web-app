@@ -5,3 +5,6 @@ export {default as Create} from './create/Create';
 export {default as Login} from './login/Login';
 export {default as SuuplierRegister} from './supplierRegister/Register';
 export {default as Supplier} from './supplier/Supplier';
+export {default as SupplierMyAddon} from './SupplierMyAddon/SupplierMyAddon';
+
+

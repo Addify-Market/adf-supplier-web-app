@@ -8,12 +8,10 @@ import { ethers } from "ethers";
 import axios from "axios";
 import {data} from "../../config";
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 const Menu = () => (
   <>
-    <Link to="/">
-      <p>Explore</p>{" "}
+    <Link to="/supplier/myaddons">
+      <p>My Addons</p>{" "}
     </Link>
     <p>My Items</p>
   </>
@@ -68,8 +66,6 @@ useEffect(() => {
         });
       console.log("response",response);
       if(response){
-        toast.success("Succesfully Login");
-        console.log('toast',toast);
         setConnected(true);
         navigate('supplier/dashboard');
       }else{
@@ -92,9 +88,14 @@ useEffect(() => {
             <h1>Adify</h1>
           </a>
         </div>
+        {role==='addonOwner' && is_connected && (
+          <div className="navbar-links_container">
+          <Menu />
+          </div>
+        )}
       </div>
       <div className="navbar-sign">
-        {user && role==='addonOwner' && !is_connected && (
+        {role==='addonOwner' && !is_connected && (
           <>
             
             <button type="button" className="secondary-btn" onClick={connectAddonOwner}>
@@ -102,7 +103,7 @@ useEffect(() => {
             </button>
           </>
         )}
-        {user && role==='addonOwner' && is_connected && (
+        { role==='addonOwner' && is_connected && (
           <>
            <Link to="/create">
               <button type="button" className="primary-btn" >
