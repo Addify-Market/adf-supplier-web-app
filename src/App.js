@@ -1,6 +1,6 @@
 import './App.css';
 import {Navbar,Footer} from './components'
-import {Profile,Item, Create,Login,SuuplierRegister,Supplier, SupplierMyAddon} from './pages'
+import {Profile,Item, Create,Login,SuuplierRegister,Supplier, SupplierMyAddon, SupplierMySales} from './pages'
 import { Routes, Route } from "react-router-dom";
 
 function App() {
@@ -17,6 +17,7 @@ function App() {
             <Route path="/supplier/register" element={ <SuuplierRegister />} />
             <Route path="/supplier/dashboard" element={ <Supplier />} />
             <Route path="/supplier/myaddons" element={ <SupplierMyAddon />} />
+            <Route path="/supplier/mysales" element={ <SupplierMySales />} />
           </Routes>
       <Footer />
     </div>

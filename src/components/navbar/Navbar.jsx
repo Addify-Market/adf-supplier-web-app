@@ -13,6 +13,9 @@ const Menu = () => (
     <Link to="/supplier/myaddons">
       <p>My Addons</p>{" "}
     </Link>
+    <Link to="/supplier/mysales">
+      <p>My Sales</p>{" "}
+    </Link>
     <p>My Items</p>
   </>
 );
