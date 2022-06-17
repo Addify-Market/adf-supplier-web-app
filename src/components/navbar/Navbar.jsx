@@ -66,7 +66,7 @@ useEffect(() => {
           console.log("\x1b[31mNot Found");
           return null;
         });
-      console.log("response",response);
+      console.log("respon",response);
       if(response){
         setConnected(true);
         navigate('supplier/dashboard');
