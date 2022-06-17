@@ -107,7 +107,7 @@ useEffect(() => {
         )}
         {is_connected && (
           <>
-           <Link to="/create">
+           <Link to="/supplier/create">
               <button type="button" className="primary-btn" >
                 Create
               </button>
