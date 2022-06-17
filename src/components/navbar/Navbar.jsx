@@ -41,7 +41,6 @@ useEffect(() => {
 },[is_connected]);
 
   const { user } = useSelector(state => state);
-  const { role } = useSelector(role => role);
   let navigate = useNavigate();
   const connectAddonOwner = async () => {
     if (!window.ethereum)
@@ -88,14 +87,14 @@ useEffect(() => {
             <h1>Adify</h1>
           </a>
         </div>
-        {role==='addonOwner' && is_connected && (
+        {is_connected && (
           <div className="navbar-links_container">
           <Menu />
           </div>
         )}
       </div>
       <div className="navbar-sign">
-        {role==='addonOwner' && !is_connected && (
+        {!is_connected && (
           <>
             
             <button type="button" className="secondary-btn" onClick={connectAddonOwner}>
@@ -103,7 +102,7 @@ useEffect(() => {
             </button>
           </>
         )}
-        { role==='addonOwner' && is_connected && (
+        {is_connected && (
           <>
            <Link to="/create">
               <button type="button" className="primary-btn" >
