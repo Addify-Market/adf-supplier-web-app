@@ -17,15 +17,15 @@ export default function SupplierVerifcation() {
                 Accounts Verification
                 </Typography>
                 <Typography variant="h5" component="div">
-                 Creating Your Addons
+                    Creating your addon
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                 Please Pay $1 equivalent ether to verify your accounts.
+                Please pay an amount equivalent to $ 1 to verify your account.
                 </Typography>
                 <Typography variant="body2">
-                This is one time fee. once you are verified, you can create UNLIMITED addons.
+                This is an one-time fee. Once you are verified, you can create UNLIMITED addons without any further charge.
                 <br />
-                {'"Please note, this is just to make the marketplace clean, so that your addons won`t get lost in fakes'}
+                {'"Please note, the verification fee is charged to ensure the authenticity of the marketplace and levitate your product`s value.'}
                 </Typography>
             </CardContent>
         <CardActions>
