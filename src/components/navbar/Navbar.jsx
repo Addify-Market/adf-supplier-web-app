@@ -16,7 +16,9 @@ const Menu = () => (
     <Link to="/supplier/mysales">
       <p>My Sales</p>{" "}
     </Link>
-    <p>My Items</p>
+    <Link to="/supplier/accounts">
+      <p>Accounts Verification</p>{" "}
+    </Link>
   </>
 );
 
@@ -113,7 +115,7 @@ useEffect(() => {
               </button>
             </Link>
             <button type="button" className="secondary-btn" onClick={disconnectAddonOwner}>
-              Discconnected
+              Disconnected
             </button>
           </>
         )}
