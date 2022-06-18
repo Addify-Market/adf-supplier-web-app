@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ethers } from "ethers";
 import axios from "axios";
-import {data} from "../../config";
-import { useNavigate } from 'react-router-dom';
+import { data } from "../../config";
+import { useNavigate } from "react-router-dom";
 const Menu = () => (
   <>
     <Link to="/supplier/myaddons">
@@ -16,13 +16,16 @@ const Menu = () => (
     <Link to="/supplier/mysales">
       <p>My Sales</p>{" "}
     </Link>
-    <Link to="/supplier/accounts">
-      <p>Accounts Verification</p>{" "}
-    </Link>
+    {localStorage.verify === null && (
+      <Link to="/supplier/accounts">
+        <p>Accounts Verification</p>{" "}
+      </Link>
+    )}
   </>
 );
 
 const Navbar = () => {
+  let navigate = useNavigate();
   const [toggleMenu, setToggleMenu] = useState(false);
   const [is_connected, setConnected] = useState(false);
   // const [user, setUser] = useState(false);
@@ -34,33 +37,31 @@ const Navbar = () => {
   //   setUser(true);
   // };
 
-
-useEffect(() => {
-  // Update the document title using the browser API
-  if(localStorage.getItem('addonOwner')!== null){
-    setConnected(true);
-  }else{
-    setConnected(false);
-  }
-  console.log("isconnected",is_connected)
-},[is_connected]);
+  useEffect(() => {
+    // Update the document title using the browser API
+    if (localStorage.getItem("addonOwner") !== null) {
+      setConnected(true);
+    } else {
+      setConnected(false);
+    }
+    console.log("isconnected", is_connected);
+  }, [is_connected]);
 
   const { user } = useSelector(state => state);
-  let navigate = useNavigate();
+
   const connectAddonOwner = async () => {
-    if (!window.ethereum)
-      alert("No crypto wallet found. Please install it.");
+    if (!window.ethereum) alert("No crypto wallet found. Please install it.");
     // const web3 = new Web3(window.ethereum);
     await window.ethereum.send("eth_requestAccounts");
-    
+
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const walletId = await signer.getAddress();
-    console.log({signer});
+    console.log({ signer });
     console.log(walletId);
-    if(walletId){
+    if (walletId) {
       //console.log(data, "variables");
-      localStorage.setItem("addonOwner",walletId);
+      localStorage.setItem("addonOwner", walletId);
       const response = await axios
         .get(`${data.serviceUrl}/supplier/${walletId}`)
         .then(res => res.data)
@@ -68,53 +69,63 @@ useEffect(() => {
           console.log("\x1b[31mNot Found");
           return null;
         });
-      console.log("respon",response);
-      if(response){
+      console.log("respon", response);
+      if (response) {
         setConnected(true);
-        navigate('supplier/dashboard');
-      }else{
-        navigate('supplier/register');
+        if (localStorage.getItem("verified") === null) {
+          return navigate("supplier/accounts");
+        }
+        navigate("supplier/dashboard");
+      } else {
+        navigate("supplier/register");
       }
       console.log(response);
     }
-  }
-  const disconnectAddonOwner =  async () => {
-    localStorage.removeItem('addonOwner');
+  };
+  const disconnectAddonOwner = async () => {
+    localStorage.removeItem("addonOwner");
     setConnected(false);
-    navigate('supplier/dashboard');
-  }
+    navigate("supplier/dashboard");
+  };
   return (
     <div className="navbar">
       <div className="navbar-links">
         <div className="navbar-links_logo">
           <img src={logo} alt="logo" />
-          <a href='/'>
+          <a href="/">
             <h1>Adify</h1>
           </a>
         </div>
         {is_connected && (
           <div className="navbar-links_container">
-          <Menu />
+            <Menu />
           </div>
         )}
       </div>
       <div className="navbar-sign">
         {!is_connected && (
           <>
-            
-            <button type="button" className="secondary-btn" onClick={connectAddonOwner}>
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={connectAddonOwner}
+            >
               Connect
             </button>
           </>
         )}
         {is_connected && (
           <>
-           <Link to="/supplier/create">
-              <button type="button" className="primary-btn" >
+            <Link to="/supplier/create">
+              <button type="button" className="primary-btn">
                 Create
               </button>
             </Link>
-            <button type="button" className="secondary-btn" onClick={disconnectAddonOwner}>
+            <button
+              type="button"
+              className="secondary-btn"
+              onClick={disconnectAddonOwner}
+            >
               Disconnected
             </button>
           </>
@@ -122,9 +133,17 @@ useEffect(() => {
       </div>
       <div className="navbar-menu">
         {toggleMenu ? (
-          <RiCloseLine color="#fff" size={27} onClick={() => setToggleMenu(false)} />
+          <RiCloseLine
+            color="#fff"
+            size={27}
+            onClick={() => setToggleMenu(false)}
+          />
         ) : (
-          <RiMenu3Line color="#fff" size={27} onClick={() => setToggleMenu(true)} />
+          <RiMenu3Line
+            color="#fff"
+            size={27}
+            onClick={() => setToggleMenu(true)}
+          />
         )}
         {toggleMenu && (
           <div className="navbar-menu_container scale-up-center">
@@ -134,7 +153,7 @@ useEffect(() => {
             <div className="navbar-menu_container-links-sign">
               {user && (
                 <>
-                  <button type="button" className="secondary-btn" >
+                  <button type="button" className="secondary-btn">
                     Connect
                   </button>
                 </>
