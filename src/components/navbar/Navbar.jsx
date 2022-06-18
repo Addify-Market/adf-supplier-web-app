@@ -13,7 +13,12 @@ const Menu = () => (
     <Link to="/supplier/myaddons">
       <p>My Addons</p>{" "}
     </Link>
-    <p>My Items</p>
+    <Link to="/supplier/mysales">
+      <p>My Sales</p>{" "}
+    </Link>
+    <Link to="/supplier/accounts">
+      <p>Accounts Verification</p>{" "}
+    </Link>
   </>
 );
 
@@ -63,7 +68,7 @@ useEffect(() => {
           console.log("\x1b[31mNot Found");
           return null;
         });
-      console.log("response",response);
+      console.log("respon",response);
       if(response){
         setConnected(true);
         navigate('supplier/dashboard');
@@ -104,13 +109,13 @@ useEffect(() => {
         )}
         {is_connected && (
           <>
-           <Link to="/create">
+           <Link to="/supplier/create">
               <button type="button" className="primary-btn" >
                 Create
               </button>
             </Link>
             <button type="button" className="secondary-btn" onClick={disconnectAddonOwner}>
-              Discconnected
+              Disconnected
             </button>
           </>
         )}
