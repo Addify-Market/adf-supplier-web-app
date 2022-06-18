@@ -5,7 +5,7 @@ export default function Supplier() {
   
   return (
     <div>
-      <Header description="Create Your Addon to promote your business."/>
+      <Header description="Shocase your products & services by re-packaging them as addon. Spotlight your brand & reach more customers"/>
       <Bids title="Hot Bids"  />
     </div>
   )

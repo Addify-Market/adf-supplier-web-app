@@ -1,66 +1,118 @@
-import './create.css'
-import Image from '../../assets/Image.png'
+import { useState } from "react";
+import "./create.css";
+import { useNavigate } from "react-router-dom";
 const Create = () => {
-
+  let navigate = useNavigate();
+  const [error, setError] = useState({
+    title: "",
+    description: "",
+    category: "",
+    price: "",
+    logo_url: ""
+  });
+  const [values, setValues] = useState({
+    title: "",
+    description: "",
+    category: "",
+    price: "",
+    logo_url: ""
+  });
+  const { title, description, category, price, logo_url } = values;
+  const handleChange = name => e => {
+    setValues({ ...values, [name]: e.target.value });
+  };
+  const createAddon = () => {
+    navigate("/supplier/myaddons");
+  };
+  const sendRequest = async e => {
+    e.preventDefault();
+    if (title.length === 0) {
+      setError({ title: "Title is required!" });
+    } else if (description.length === 0) {
+      setError({ description: "Description is required!" });
+    } else if (price.length === 0) {
+      setError({ price: "Price is required!" });
+    } else if (category.length === 0) {
+      setError({ category: "Category is required!" });
+    } else if (logo_url.length === 0) {
+      setError({ logo_url: "Logo URL is required!" });
+    } else {
+      alert("success");
+    }
+    return true;
+  };
   return (
-    <div className='create section__padding'>
+    <div className="create section__padding">
       <div className="create-container">
-        <h1>Create new Item</h1>
-        <p className='upload-file'>Upload File</p>
-        <div className="upload-img-show">
-            <h3>JPG, PNG, GIF, SVG, WEBM, MP3, MP4. Max 100mb.</h3>
-            <img src={Image} alt="banner" />
-            <p>Drag and Drop File</p>
-        </div>
-        <form className='writeForm' autoComplete='off'>
-          
+        <h1>Create new addon</h1>
+
+        <form className="writeForm" onSubmit={sendRequest} autoComplete="off">
           <div className="formGroup">
-            <label>Upload</label>
-            <input type="file" className='custom-file-input'
-          />
+            <label>Title *</label>
+            <input
+              type="text"
+              onChange={handleChange("title")}
+              value={title}
+              placeholder="Title"
+              autoFocus={true}
+            />
+            {error.title && <span className="error">{error.title}</span>}
           </div>
           <div className="formGroup">
-            <label>Name</label>
-            <input type="text" placeholder='Item Name' autoFocus={true} />
+            <label>Description *</label>
+            <textarea
+              type="text"
+              onChange={handleChange("description")}
+              value={description}
+              rows={4}
+              placeholder="Decription of your item"
+            ></textarea>
+            {error.description && (
+              <span className="error">{error.description}</span>
+            )}
           </div>
           <div className="formGroup">
-            <label>Description</label>
-            <textarea type="text" rows={4}
-          placeholder='Decription of your item' 
-          ></textarea>
+            <label>Price *</label>
+            <input
+              type="text"
+              onChange={handleChange("price")}
+              value={price}
+              placeholder="Price"
+            />
+            {error.price && <span className="error">{error.price}</span>}
           </div>
           <div className="formGroup">
-            <label>Price</label>
-            <div className="twoForm">
-              <input type="text" placeholder='Price'  />
-              <select>
-                <option value="ETH">ETH</option>
-                <option value="BTC">BTC</option>
-                <option value="LTC">LTC</option>
-              </select>
-            </div>
-          </div>
-          <div className="formGroup">
-            <label>Category</label>
-            <select >
-               <option>Art</option>
-               <option>Photography</option>
-               <option>Sports</option>
-               <option>Collectibles</option>
-               <option>Trading Cards</option>
-               <option>Utility</option>
+            <label>Category *</label>
+            <select onChange={handleChange("category")}>
+              <option>Travel</option>
+              <option>Shopping</option>
+              <option>Sports</option>
+              <option>Food</option>
             </select>
+            {error.category && <span className="error">{error.category}</span>}
           </div>
           <div className="formGroup">
-            <label>Available Items</label>
-            <input type="text" placeholder='No of Items'/>
+            <label>Logo Url *</label>
+            <input
+              type="text"
+              onChange={handleChange("logo_url")}
+              value={logo_url}
+              placeholder="Logo Url"
+              autoFocus={true}
+            />
+            {error.logo_url && <span className="error">{error.logo_url}</span>}
           </div>
-          <button className='writeButton'>Create Item</button>
+          <div className="formGroup">
+            <label>External Link</label>
+            <input type="text" placeholder="Company Website Link" />
+          </div>
+          <button className="writeButton" onClick={createAddon}>
+            Create Item
+          </button>
         </form>
       </div>
     </div>
-   
-  )
+  );
 };
 
 export default Create;

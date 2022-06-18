@@ -80,6 +80,7 @@ line-height: 21px;
   color: white;
   font-size: 16px;
   line-height: 26px;
+  width: 700px;
 }
 .formGroup select{
   background: #2D2E36;
@@ -152,4 +153,10 @@ line-height: 21px;
     display: none;
     margin-bottom: 20px;
   }
+}
+
+.error {
+  color:#db2269;
+  font-size: 1em;
+  display: relative;
 }
