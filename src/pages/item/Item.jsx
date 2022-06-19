@@ -34,7 +34,7 @@ const Item = () => {
           </p>
         </div>
         <div className="item-content-buy">
-          <button className="primary-btn">Link Addon</button>
+          {/* <button className="primary-btn">Link Addon</button> */}
         </div>
       </div>
     </div>
