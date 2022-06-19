@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ethers } from "ethers";
 import axios from "axios";
-import { data } from "../../config";
+import { serviceUrl } from "../../config";
 import { useNavigate } from "react-router-dom";
+import LoadingIcon from "../../assets/loading.gif";
 const Menu = () => (
   <>
     <Link to="/supplier/myaddons">
@@ -25,8 +26,9 @@ const Menu = () => (
 );
 
 const Navbar = () => {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [is_connected, setConnected] = useState(false);
   // const [user, setUser] = useState(false);
 
@@ -49,7 +51,8 @@ const Navbar = () => {
 
   const { user } = useSelector(state => state);
 
-  const connectAddonOwner = async () => {
+  const connectWallet = async () => {
+    setLoading(true);
     if (!window.ethereum) alert("No crypto wallet found. Please install it.");
     // const web3 = new Web3(window.ethereum);
     await window.ethereum.send("eth_requestAccounts");
@@ -57,13 +60,11 @@ const Navbar = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const walletId = await signer.getAddress();
-    console.log({ signer });
-    console.log(walletId);
     if (walletId) {
       //console.log(data, "variables");
       localStorage.setItem("addonOwner", walletId);
       const response = await axios
-        .get(`${data.serviceUrl}/supplier/${walletId}`)
+        .get(`${serviceUrl}/supplier/${walletId}`)
         .then(res => res.data)
         .catch(e => {
           console.log("\x1b[31mNot Found");
@@ -71,6 +72,7 @@ const Navbar = () => {
         });
       console.log("respon", response);
       if (response) {
+        setLoading(false);
         setConnected(true);
         if (localStorage.getItem("verified") === null) {
           return navigate("supplier/accounts");
@@ -82,10 +84,12 @@ const Navbar = () => {
       console.log(response);
     }
   };
-  const disconnectAddonOwner = async () => {
+  const disconnectWallet = async () => {
+    setLoading(true);
     localStorage.removeItem("addonOwner");
     setConnected(false);
     navigate("supplier/dashboard");
+    setLoading(false);
   };
   return (
     <div className="navbar">
@@ -108,9 +112,13 @@ const Navbar = () => {
             <button
               type="button"
               className="secondary-btn"
-              onClick={connectAddonOwner}
+              onClick={connectWallet}
             >
-              Connect
+              {loading ? (
+                <img src={LoadingIcon} style={{ width: "30px" }} alt="" />
+              ) : (
+                "Connect"
+              )}
             </button>
           </>
         )}
@@ -124,7 +132,7 @@ const Navbar = () => {
             <button
               type="button"
               className="secondary-btn"
-              onClick={disconnectAddonOwner}
+              onClick={disconnectWallet}
             >
               Disconnected
             </button>
