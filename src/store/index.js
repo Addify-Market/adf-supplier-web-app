@@ -11,16 +11,12 @@ const init = {
   role: "",
   user: false,
   connected : true,
-  addOns: []
+  addons: [],
+  supplier:{}
 };
 
 const reducer = (state = init, action) => {
   switch (action.type) {
-    case "SET_ADDONS":
-      return {
-        ...state,
-        addOns: action.payload
-      };
     case "SET_KEYWORD":
       return {
         ...state,
@@ -41,7 +37,16 @@ const reducer = (state = init, action) => {
         ...state,
         role: action.payload
       };
-
+      case "SUPPLIER_INFO":
+        return {
+          ...state,
+          supplier: action.data
+        };
+        case "GET_ADDONS":
+        return {
+          ...state,
+          addons: action.data
+        };
     default:
       return state;
   }
@@ -50,7 +55,7 @@ const reducer = (state = init, action) => {
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["addOns", "", "role"]
+  whitelist: ["supplier", "", "role"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);

@@ -1,11 +1,21 @@
-import { publicPost, publicGet } from "../../utils/apiCaller";
+import { publicPost, publicGet, privateGet } from "../../utils/apiCaller";
 
-export const createAddon = (data) => async dispatch => {
+export const createAddon = (supplierId, data) =>  dispatch => {
    
-    return publicPost(`addons`, data)
+     publicPost(`addons`, {supplierid:supplierId}, data)
       .then(response => {
-        // dispatch(updateSuccess());
-        console.log(`response: `, response)
+         privateGet(`supplier/addons`, {supplierid:supplierId})
+          .then(response => {
+            
+            dispatch({
+              type:"GET_ADDONS",
+              data: response.data.data
+            })
+          })
+          .catch(error => {
+            // dispatch(updateFail());
+            console.log(`error: `, error);
+          });
       })
       .catch(error => {
         // dispatch(updateFail());
