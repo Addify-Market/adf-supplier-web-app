@@ -1,9 +1,10 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+import thunk from "redux-thunk";
 
 const init = {
   keyword: "",
@@ -54,9 +55,16 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
+const enhancers = [applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()];
+
+// if (environment === "dev") {
+//   enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+// }
+
 const store = createStore(
   persistedReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  undefined,
+  compose(...enhancers)
 );
 
 const persistore = persistStore(store);
