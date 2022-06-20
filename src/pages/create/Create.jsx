@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import "./create.css";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createAddon, getCategory } from "./actions";
 const Create = () => {
   const dispatch = useDispatch();
+  const {  supplier, addons } = useSelector(state => state);
   let navigate = useNavigate();
   const [categories, setCategories] = useState([]);
   const [error, setError] = useState({
@@ -35,6 +36,7 @@ const Create = () => {
   useEffect(() => {
     categoryList();
   }, []);
+
   const sendRequest = async e => {
     e.preventDefault();
     if (title.length === 0) {
@@ -50,7 +52,7 @@ const Create = () => {
     } else {
       // alert("success");
       
-      await dispatch(createAddon({...values}));
+      await dispatch(createAddon(supplier.supplierId, {...values}));
       navigate("/supplier/myaddons");
     }
     return true;
