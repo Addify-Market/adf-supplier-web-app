@@ -70,6 +70,7 @@ const Navbar = () => {
           console.log("\x1b[31mNot Found");
           return null;
         });
+      
       console.log("respon", response);
       if (response) {
         setLoading(false);
