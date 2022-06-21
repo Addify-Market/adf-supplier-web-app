@@ -4,6 +4,9 @@ import creator from "../../assets/seller2.png";
 import item from "../../assets/item1.png";
 
 const Item = () => {
+  const url = window.location.href;
+  const lastSegment = url.split("/").pop();
+  console.log("addonid",lastSegment)
   return (
     <div className="item section__padding">
       <div className="item-image">

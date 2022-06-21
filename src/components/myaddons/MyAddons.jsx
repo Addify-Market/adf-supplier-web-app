@@ -28,8 +28,8 @@ const MyAddons = ({ title }) => {
               <div className="card-column" key={addon.addonId}>
               <div className="bids-card">
                 <div className="bids-card-top">
-                  <img src={addon.logo}  alt="" />
-                  <Link to={`#`}>
+                  <img src={addon.logo}  alt="" width="100px" height="100px"/>
+                  <Link to={`/item/${addon.addonId}`}>
                     <p className="bids-title">{addon.title}</p>
                   </Link>
                 </div>
