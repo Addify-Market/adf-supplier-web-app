@@ -12,8 +12,6 @@
 
 }
 .item-image img {
-  width: 70%;
-  height: 40%;
   border-radius: 70px;
   padding: 50px;
 }
@@ -195,4 +193,13 @@
     
   }
  
+}
+.previewBox {
+  width: 120px;
+  height: 80px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin: 10px;
+  float: left;
+  text-align: center;
+  border-radius: 5px;
 }

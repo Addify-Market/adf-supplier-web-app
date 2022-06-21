@@ -35,11 +35,17 @@ const Create = () => {
   //   navigate("/supplier/myaddons");
   // };
   useEffect(() => {
+    //categoryList();
+    const categoryList = async() =>{
+      const category = await dispatch(getCategory());
+      setCategories(category);
+    }
     categoryList();
-  },[]);
+  },[dispatch]);
 
   const sendRequest = async e => {
     e.preventDefault();
+    console.log("success",logo.length);
     if (title.length === 0) {
       setError({ title: "Title is required!" });
     } else if (description.length === 0) {
@@ -50,6 +56,8 @@ const Create = () => {
       setError({ category: "Category is required!" });
     } else if (logo.length === 0) {
       setError({ logo_url: "Logo URL is required!" });
+    }else if (voucherCodes.length === 0) {
+      setError({ voucherCodes: "Voucher Code is required!" });
     } else {
       // alert("success");
       
@@ -58,15 +66,16 @@ const Create = () => {
     }
     return true;
   };
-  const categoryList = async () =>{
-    const category = await dispatch(getCategory());
-    setCategories(category);
-  }
+  // const categoryList = async () =>{
+  //   const category = await dispatch(getCategory());
+  //   setCategories(category);
+  // }
   const onLogoUrl = () =>{
     const urllogo = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq4N3xaDYwv3Hz2MKb9q1WlJydOtbbURDcO63iw1P6qwt5DSCdr_-ekRPDf8xOIarH2n8&usqp=CAU","https://logos-download.com/wp-content/uploads/2019/01/Bata_Shoes_Logo.png","https://upload.wikimedia.org/wikipedia/commons/f/f3/Foodpanda_logo_since_2017.png","https://upload.wikimedia.org/wikipedia/commons/f/f9/Hoichoi-Logos-3.png"];
     let randomItem = urllogo[Math.floor(Math.random()*urllogo.length)];
     setLogoUrl(randomItem);
-    console.log(randomItem);
+    setValues({ ...values, logo: randomItem});
+  
   }
   return (
     <div className="create section__padding">
@@ -136,9 +145,10 @@ const Create = () => {
               value={link} placeholder="Company Website Link" />
           </div>
           <div className="formGroup">
-            <label>Voucher Codes</label>
+            <label>Voucher Codes *</label>
             <input type="text" onChange={handleChange("voucherCodes")}
               value={voucherCodes} placeholder="Voucher Codes" />
+              {error.voucherCodes && <span className="error">{error.voucherCodes}</span>}
           </div>
           <button className="writeButton">
             Create Item
