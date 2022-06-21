@@ -1,39 +1,50 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./item.css";
 import creator from "../../assets/seller2.png";
-import item from "../../assets/item1.png";
-
+import { useSelector } from "react-redux";
 const Item = () => {
+  const [addonsData,setAddonsData] = useState({})
   const url = window.location.href;
   const lastSegment = url.split("/").pop();
-  console.log("addonid",lastSegment)
+  const props = useSelector(state => state);
+  
+  useEffect(()=>{
+    // getAddonData()
+    props.addons.forEach(addon=>{
+     
+      if(addon.addonId===lastSegment){
+        setAddonsData(addon);
+      }
+      // return true;
+    })
+  },[props.addons, lastSegment])
+  
+  
   return (
     <div className="item section__padding">
+      {console.log("addonid",addonsData)}
       <div className="item-image">
-        <img src={item} alt="item" />
+        <img src={addonsData.logo} alt="item" />
       </div>
       <div className="item-content">
         <div className="item-content-title">
-          <h1>Abstact Smoke Red Blue</h1>
+          <h1>{addonsData.title}</h1>
           <p>
-            From <span>4.5 ETH</span> ‧ 20 of 25 available
+           Price <span>{addonsData.price} ETH</span> ‧ 20 of 25 available
           </p>
         </div>
         <div className="item-content-creator">
           <div>
-            <p>Creater</p>
+            <p>Creator ID</p>
           </div>
           <div>
             <img src={creator} alt="creator" />
-            <p>Rian Leon </p>
+            <p>{addonsData.distributedBy}</p>
           </div>
         </div>
         <div className="item-content-detail">
           <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book
+            {addonsData.description}
           </p>
         </div>
         <div className="item-content-buy">
