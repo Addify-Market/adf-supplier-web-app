@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { createAddon, getCategory } from "./actions";
 const Create = () => {
   const dispatch = useDispatch();
-  const {  supplier, addons } = useSelector(state => state);
+  const {  supplier} = useSelector(state => state);
   let navigate = useNavigate();
   const [categories, setCategories] = useState([]);
+  const [logoUrl,setLogoUrl] = useState("");
   const [error, setError] = useState({
     title: "",
     description: "",
@@ -35,7 +36,7 @@ const Create = () => {
   // };
   useEffect(() => {
     categoryList();
-  }, []);
+  },[]);
 
   const sendRequest = async e => {
     e.preventDefault();
@@ -59,9 +60,13 @@ const Create = () => {
   };
   const categoryList = async () =>{
     const category = await dispatch(getCategory());
-    console.log("category",category);
-    // return category;
     setCategories(category);
+  }
+  const onLogoUrl = () =>{
+    const urllogo = ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRq4N3xaDYwv3Hz2MKb9q1WlJydOtbbURDcO63iw1P6qwt5DSCdr_-ekRPDf8xOIarH2n8&usqp=CAU","https://logos-download.com/wp-content/uploads/2019/01/Bata_Shoes_Logo.png","https://upload.wikimedia.org/wikipedia/commons/f/f3/Foodpanda_logo_since_2017.png","https://upload.wikimedia.org/wikipedia/commons/f/f9/Hoichoi-Logos-3.png"];
+    let randomItem = urllogo[Math.floor(Math.random()*urllogo.length)];
+    setLogoUrl(randomItem);
+    console.log(randomItem);
   }
   return (
     <div className="create section__padding">
@@ -81,7 +86,7 @@ const Create = () => {
             {error.title && <span className="error">{error.title}</span>}
           </div>
           <div className="formGroup">
-            <label>Description *</label>
+          <label > Description * </label>
             <textarea
               type="text"
               onChange={handleChange("description")}
@@ -115,11 +120,11 @@ const Create = () => {
             {error.category && <span className="error">{error.categoryId}</span>}
           </div>
           <div className="formGroup">
-            <label>Logo Url *</label>
+            <label onDoubleClick={onLogoUrl}>Logo Url *</label>
             <input
               type="text"
               onChange={handleChange("logo")}
-              value={logo}
+              value={logoUrl}
               placeholder="Logo Url"
               autoFocus={true}
             />
