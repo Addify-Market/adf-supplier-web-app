@@ -12,7 +12,8 @@ const init = {
   user: false,
   connected : true,
   addons: [],
-  supplier:{}
+  supplier:{},
+  supplierAddon:{}
 };
 
 const reducer = (state = init, action) => {
@@ -47,6 +48,11 @@ const reducer = (state = init, action) => {
           ...state,
           addons: action.data
         };
+        case "ADDON_INFO":
+          return {
+            ...state,
+            supplierAddon: action.data
+          };
     default:
       return state;
   }

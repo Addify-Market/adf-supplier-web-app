@@ -22,7 +22,7 @@ export const publicPost = (
     endpoint,
     apiVersion = defaultApiVersion
   ) => {
-      
+    console.log(endpoint);
     return axios
       .get(`${serviceUrl}/${endpoint}`, 
     //   {
