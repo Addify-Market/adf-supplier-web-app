@@ -1,40 +1,96 @@
-import React from "react";
+import React, {useEffect} from "react";
 import "./item.css";
-import creator from "../../assets/seller2.png";
-import item from "../../assets/item1.png";
-
+import {useDispatch, useSelector } from "react-redux";
+import { getAddonInfo } from "./actions";
 const Item = () => {
+
+  const url = window.location.href;
+  const lastSegment = url.split("/").pop();
+  const addonsData = useSelector(state => state);
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    // getAddonData()
+    // props.addons.forEach(addon=>{
+     
+    //   if(addon.addonId===lastSegment){
+    //     setAddonsData(addon);
+    //   }
+    //   // return true;
+    // })
+    dispatch(getAddonInfo(lastSegment));
+  },[dispatch,lastSegment])
+ 
+  
   return (
     <div className="item section__padding">
       <div className="item-image">
-        <img src={item} alt="item" />
+        <img src={addonsData.supplierAddon.logo} width="300px" height="300px" alt="item" />
+        {addonsData.supplierAddon.linkedNFT &&
+        <div className="item-content-detail">
+          <p>
+            Linked with NFT Contract Address
+            
+          </p>
+          <p>
+            
+              <>
+              <img src={addonsData.supplierAddon.logo} width="100px" height="100px" alt="item" /> 
+              <img src={addonsData.supplierAddon.logo} width="100px" height="100px" alt="item" />
+              </>
+          
+            
+          </p>
+
+        </div>
+          }
       </div>
       <div className="item-content">
         <div className="item-content-title">
-          <h1>Abstact Smoke Red Blue</h1>
-          <p>
-            From <span>4.5 ETH</span> ‧ 20 of 25 available
+          <h1>{addonsData.supplierAddon.title}</h1>
+          {/* <p>
+           Price <span>{addonsData.supplierAddon.price} ETH</span> ‧ {addonsData.supplierAddon.used} Used and {addonsData.supplierAddon.booked} booked of {addonsData.supplierAddon.quantity-(addonsData.supplierAddon.used+addonsData.supplierAddon.booked)} available
           </p>
+          <p>Total Addon {addonsData.supplierAddon.quantity}</p> */}
         </div>
-        <div className="item-content-creator">
+        
+            <div
+                style={{
+                  padding: 20,
+                  background: "#70707021",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: "#fff",
+                  borderRadius: 5
+                }}
+              >
+                Price <span>{addonsData.supplierAddon.price} ETH</span>
+                <br />
+                {addonsData.supplierAddon.quantity-(addonsData.supplierAddon.used+addonsData.supplierAddon.booked)} of{" "}
+                {addonsData.supplierAddon.quantity} available
+              </div>
+        {/* <div className="item-content-creator">
           <div>
-            <p>Creater</p>
+            <p>Creator ID</p>
           </div>
           <div>
             <img src={creator} alt="creator" />
-            <p>Rian Leon </p>
+            <p>{}</p>
           </div>
-        </div>
+        </div> */}
         <div className="item-content-detail">
           <p>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book
+            {addonsData.supplierAddon.description}
           </p>
+          {addonsData.supplierAddon && (
+                <p>
+                  <a rel="noreferrer" href={addonsData.supplierAddon.link} target="_blank">
+                    More details...
+                  </a>
+                </p>
+              )}
         </div>
         <div className="item-content-buy">
-          {/* <button className="primary-btn">Link Addon</button> */}
+        
         </div>
       </div>
     </div>

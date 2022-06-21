@@ -1,25 +1,23 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { applyMiddleware, compose, createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+import thunk from "redux-thunk";
 
 const init = {
   keyword: "",
   role: "",
   user: false,
   connected : true,
-  addOns: []
+  addons: [],
+  supplier:{},
+  supplierAddon:{}
 };
 
 const reducer = (state = init, action) => {
   switch (action.type) {
-    case "SET_ADDONS":
-      return {
-        ...state,
-        addOns: action.payload
-      };
     case "SET_KEYWORD":
       return {
         ...state,
@@ -40,7 +38,21 @@ const reducer = (state = init, action) => {
         ...state,
         role: action.payload
       };
-
+      case "SUPPLIER_INFO":
+        return {
+          ...state,
+          supplier: action.data
+        };
+        case "GET_ADDONS":
+        return {
+          ...state,
+          addons: action.data
+        };
+        case "ADDON_INFO":
+          return {
+            ...state,
+            supplierAddon: action.data
+          };
     default:
       return state;
   }
@@ -49,14 +61,21 @@ const reducer = (state = init, action) => {
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["addOns", "", "role"]
+  whitelist: ["supplier", "", "role"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducer);
 
+const enhancers = [applyMiddleware(thunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()];
+
+// if (environment === "dev") {
+//   enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+// }
+
 const store = createStore(
   persistedReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  undefined,
+  compose(...enhancers)
 );
 
 const persistore = persistStore(store);

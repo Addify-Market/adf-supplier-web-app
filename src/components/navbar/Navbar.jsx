@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./navbar.css";
+import { useDispatch } from "react-redux";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ethers } from "ethers";
-import axios from "axios";
-import { serviceUrl } from "../../config";
 import { useNavigate } from "react-router-dom";
 import LoadingIcon from "../../assets/loading.gif";
+import {getSupplierInfo} from "./action";
+
 const Menu = () => (
   <>
     <Link to="/supplier/myaddons">
@@ -30,14 +31,8 @@ const Navbar = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const [loading, setLoading] = useState(false);
   const [is_connected, setConnected] = useState(false);
-  // const [user, setUser] = useState(false);
+  const dispatch = useDispatch();
 
-  // const handleLogout = () => {
-  //   setUser(false);
-  // };
-  // const handleLogin = () => {
-  //   setUser(true);
-  // };
 
   useEffect(() => {
     // Update the document title using the browser API
@@ -48,9 +43,21 @@ const Navbar = () => {
     }
     console.log("isconnected", is_connected);
   }, [is_connected]);
+  const { user, supplier } = useSelector(state => state);
 
-  const { user } = useSelector(state => state);
+  useEffect(() => {
+    console.log("redirecting", supplier)
+    // Update the document title using the browser API
+    if (supplier.supplierId) {
+      setLoading(false);
+      setConnected(true);
 
+      if (localStorage.getItem("verified") === null) {
+        return navigate("supplier/accounts");
+      }
+      navigate("supplier/dashboard");
+    }
+  }, [supplier]);
   const connectWallet = async () => {
     setLoading(true);
     if (!window.ethereum) alert("No crypto wallet found. Please install it.");
@@ -63,26 +70,9 @@ const Navbar = () => {
     if (walletId) {
       //console.log(data, "variables");
       localStorage.setItem("addonOwner", walletId);
-      const response = await axios
-        .get(`${serviceUrl}/supplier/${walletId}`)
-        .then(res => res.data)
-        .catch(e => {
-          console.log("\x1b[31mNot Found");
-          return null;
-        });
-      console.log("respon", response);
-      if (response) {
-        setLoading(false);
-        setConnected(true);
-        if (localStorage.getItem("verified") === null) {
-          return navigate("supplier/accounts");
-        }
-        navigate("supplier/dashboard");
-      } else {
-        navigate("supplier/register");
-      }
-      console.log(response);
+      dispatch(getSupplierInfo(walletId));
     }
+
   };
   const disconnectWallet = async () => {
     setLoading(true);
