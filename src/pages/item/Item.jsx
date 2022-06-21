@@ -25,7 +25,7 @@ const Item = () => {
     <div className="item section__padding">
       <div className="item-image">
         <img src={addonsData.supplierAddon.logo} width="300px" height="300px" alt="item" />
-        {addonsData.supplierAddon.linkedNFT.length !==0 &&
+        {addonsData.supplierAddon.linkedNFT &&
         <div className="item-content-detail">
           <p>
             Linked with NFT Contract Address
@@ -34,8 +34,8 @@ const Item = () => {
           <p>
             
               <>
-              <img src={addonsData.supplierAddon.linkedNFT.image} width="100px" height="100px" alt="item" /> 
-              <img src={addonsData.supplierAddon.linkedNFT.image} width="100px" height="100px" alt="item" />
+              <img src={addonsData.supplierAddon.logo} width="100px" height="100px" alt="item" /> 
+              <img src={addonsData.supplierAddon.logo} width="100px" height="100px" alt="item" />
               </>
           
             
@@ -47,11 +47,27 @@ const Item = () => {
       <div className="item-content">
         <div className="item-content-title">
           <h1>{addonsData.supplierAddon.title}</h1>
-          <p>
+          {/* <p>
            Price <span>{addonsData.supplierAddon.price} ETH</span> ‧ {addonsData.supplierAddon.used} Used and {addonsData.supplierAddon.booked} booked of {addonsData.supplierAddon.quantity-(addonsData.supplierAddon.used+addonsData.supplierAddon.booked)} available
           </p>
-          <p>Total Addon {addonsData.supplierAddon.quantity}</p>
+          <p>Total Addon {addonsData.supplierAddon.quantity}</p> */}
         </div>
+        
+            <div
+                style={{
+                  padding: 20,
+                  background: "#70707021",
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: "#fff",
+                  borderRadius: 5
+                }}
+              >
+                Price <span>{addonsData.supplierAddon.price} ETH</span>
+                <br />
+                {addonsData.supplierAddon.quantity-(addonsData.supplierAddon.used+addonsData.supplierAddon.booked)} of{" "}
+                {addonsData.supplierAddon.quantity} available
+              </div>
         {/* <div className="item-content-creator">
           <div>
             <p>Creator ID</p>
@@ -65,6 +81,13 @@ const Item = () => {
           <p>
             {addonsData.supplierAddon.description}
           </p>
+          {addonsData.supplierAddon && (
+                <p>
+                  <a rel="noreferrer" href={addonsData.supplierAddon.link} target="_blank">
+                    More details...
+                  </a>
+                </p>
+              )}
         </div>
         <div className="item-content-buy">
         
