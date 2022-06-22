@@ -25,23 +25,27 @@ const Item = () => {
     <div className="item section__padding">
       <div className="item-image">
         <img src={addonsData.supplierAddon.logo} width="300px" height="300px" alt="item" />
-        {addonsData.supplierAddon.linkedNFT &&
-        <div className="item-content-detail">
-          <p>
-            Linked with NFT Contract Address
+        {addonsData.supplierAddon.linkedNFT && addonsData.supplierAddon.linkedNFT.metadata &&
+          <div className="item-content-detail">
+            <p>
+              Linked with NFT 
+              
+            </p>
+            <p>
             
-          </p>
-          <p>
-            
-              <>
-              <img src={addonsData.supplierAddon.logo} width="100px" height="100px" alt="item" /> 
-              <img src={addonsData.supplierAddon.logo} width="100px" height="100px" alt="item" />
-              </>
-          
-            
-          </p>
+              {
+                addonsData.supplierAddon.linkedNFT.foreach(addon=>{
+                  <>
+                  <img src={addon.metadata.image} width="100px" height="100px" alt="item" /> 
+                  <img src={addon.metadata.image} width="100px" height="100px" alt="item" />
+                  </>
+                })
+              
+              }
+              
+            </p>
 
-        </div>
+          </div>
           }
       </div>
       <div className="item-content">
@@ -81,7 +85,7 @@ const Item = () => {
           <p>
             {addonsData.supplierAddon.description}
           </p>
-          {addonsData.supplierAddon && (
+          {addonsData.supplierAddon.link && (
                 <p>
                   <a rel="noreferrer" href={addonsData.supplierAddon.link} target="_blank">
                     More details...
